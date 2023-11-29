@@ -13,12 +13,18 @@
 #define  DCSBIOS_ESP32_WIFI_INSTRUMENTATION // Calculates loop() execution time, optional.
 #include  "DcsBios.h" // If using PlatformIO, use <DcsBios.h>
 
-#include "pinsettings.h"
 
+//#include "font1.h"
+#include "display.h"
+#include "pinsettings.h"
+#include "ded_data.h"
 #include "bindings_F16.h"
 
 
+
 void setup() {
+
+  setup_tft();
   //Serial.begin(115200);
   // put your setup code here, to run once:
   DcsBios::setup();
@@ -27,5 +33,5 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   DcsBios::loop();
-
+  loop_tft();
 }
