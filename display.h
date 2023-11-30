@@ -44,9 +44,10 @@ void drawDedLine(uint8_t row, const char dedLine[])
   TopOffSet = (int16_t)row * RowOffSet;
   TopOffSet += FirstLineTopOffset;  
   tft.setTextColor(TFT_YELLOW, TFT_BLACK,true);
+  tft.setCursor(0,TopOffSet);
   tft.setTextPadding(320);
+  tft.print(" ");
   tft.setCursor(LeftOffSet,TopOffSet);
-//  tft.drawString(dedline,LeftOffSet,TopOffSet);
   tft.println(dedLine);
 
 }
@@ -92,10 +93,16 @@ void PaintCycles(){
 void paint_speed(){
   tft.setTextColor(TFT_RED, TFT_BLACK,true);
   tft.setTextPadding(160);
+  tft.setCursor(0,180);
+  tft.setTextPadding(160);
+  tft.print(" ");
   tft.setCursor(10,180);
 //  tft.drawString(dedline,LeftOffSet,TopOffSet);
   tft.print(AirSpeed);
   tft.println(" kt");
+  tft.setCursor(0,210);
+  tft.setTextPadding(160);
+  tft.print(" ");  
   tft.setCursor(10,210);
   tft.print(SecPerMile);
   tft.println(" s/mile");
