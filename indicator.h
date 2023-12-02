@@ -8,7 +8,9 @@ unsigned int RightWheelDown = 0;
 unsigned int GearMoving = 0;
 unsigned int AirSpeed = 100;
 long KnotSecondsPerMile = 3218;
-long SecPerMile = 99999;
+long SecPerMile = 0;
+unsigned int LastAirSpeed = 0;
+long LastSecPerMile = 0;
 
 void onIasUsIntChange(unsigned int newValue) {
     AirSpeed = newValue;

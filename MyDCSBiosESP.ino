@@ -5,6 +5,9 @@
 
 #include "wificredentials.h"
 
+//#define DCSBIOSRUN
+
+
 #define  DCSBIOS_ESP32_WIFI "ESPSlave" // Displayed in DCS-Nexus
 #define  DCSBIOS_ESP32_WIFI_MULTICAST // TCP requires the AsyncTCP library.
 
@@ -20,6 +23,7 @@
 #include "pinsettings.h"
 #include "ded_data.h"
 #include "bindings_F16.h"
+#include "command.h"
 
 
 
@@ -29,10 +33,13 @@ void setup() {
   //Serial.begin(115200);
   // put your setup code here, to run once:
   DcsBios::setup();
+  Command_Setup();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
   DcsBios::loop();
+  Command_Loop();
   loop_tft();
+  //Serial.println("TADA");
 }
