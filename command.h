@@ -10,6 +10,56 @@
 SerialCommand sCmd;  
 
 
+void debugLine(){
+  int aNumber;
+  char *tmp = (char *)"";
+  char *arg;
+  int x;
+  Serial.println("We're in processCommand");
+  arg = sCmd.next();
+  if (arg != NULL) {
+    aNumber = atoi(arg);    // Converts a char string to an integer
+    switch (aNumber)
+    {
+    case 1:
+      tmp = line1;
+      break;
+
+    case 2:
+      tmp = line2;
+      break;
+
+    case 3:
+      tmp = line3;
+      break;
+
+    case 4:
+      tmp = line4;
+      break;
+
+    case 5:
+      tmp = line5;
+      break;
+
+
+    default:
+      break;
+    }
+    for(x = 0;x < 25 ; x++ ){
+        Serial.print("-:");
+        Serial.print( tmp[x]);
+        Serial.print(":-");
+    }
+    Serial.println("");
+    for(x = 0;x < 25 ; x++ ){
+        Serial.print("-");
+        Serial.print( tmp[x],HEX);
+        Serial.print("-");
+    }
+    Serial.println("");
+  }
+}
+
 void printLine(){
   int aNumber;
   char *arg;
@@ -192,6 +242,7 @@ void Command_Setup(){
     sCmd.addCommand("brtn", BRTN);
     sCmd.addCommand("blist", BLIST);
     sCmd.addCommand("printline",printLine);
+    sCmd.addCommand("debugline",debugLine);
     sCmd.setDefaultHandler(unrecognized);
 
 }

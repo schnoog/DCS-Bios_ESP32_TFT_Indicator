@@ -7,9 +7,11 @@
 #include "ded_data.h"
 #include "indicator.h"
 #include "Arial-Regular22.h"
+#include "DEDArialMS-reg22.h"
 
+//#define MYFONT Arial_Regular22
+#define MYFONT DEDArialMS_reg22
 
-#define MYFONT Arial_Regular22
 
 int LC = 0;
 TFT_eSPI tft = TFT_eSPI();       // Invoke custom library
@@ -19,28 +21,20 @@ uint32_t Bitmap = 0xFF8;  // Example bitmap: 111111111000
 int16_t CursorX;
 int16_t CursorY;
 int16_t ToFill;
+int16_t SpaceWidth=3;
 
 void setup_tft(){
   tft.begin();
   tft.fillScreen(TFT_BLACK);
-  
   tft.setRotation(1);
-   
   spr.setColorDepth(16); // 16 bit colour needed to show anti-aliased fonts
-
-/*
-    line1 ="ACB HIJKLMNTUVW";
-    line2 ="a123.2 a3345";
-    line3 ="HALLO N12o23.23";
-    line4 ="1234567890123456789012345";
-    line5 =" ";
-*/
 }
 
 
 /*
 * END SETUP
 */
+
 
 bool isPrintable(char c) {
     // Check if the character is a printable ASCII character
@@ -91,9 +85,6 @@ bool compareArrays(const char arr1[], const char arr2[]) {
 void drawDedLineNew(uint8_t row, const char dedLine[], const char oldLine[]) {
     char truncatedDedLine[26];  // 25 characters plus null terminator
     char truncatedOldLine[26];  // 25 characters plus null terminator
-
-
-
     // Copy at most 25 characters from dedLine to truncatedDedLine
     strncpy(truncatedDedLine, dedLine, 25);
     truncatedDedLine[25] = '\0';  // Ensure null termination
@@ -101,11 +92,12 @@ void drawDedLineNew(uint8_t row, const char dedLine[], const char oldLine[]) {
     // Copy at most 25 characters from oldLine to truncatedOldLine
     strncpy(truncatedOldLine, oldLine, 25);
     truncatedOldLine[25] = '\0';  // Ensure null termination
-
+    
     int16_t RowOffSet = 30;
     int16_t LeftOffSet = 1;
     int16_t TopOffSet;
     int16_t FirstLineTopOffset = 5;
+    
     TopOffSet = (int16_t)row * RowOffSet;
     TopOffSet += FirstLineTopOffset;
 
@@ -146,10 +138,10 @@ void drawDedLineNew(uint8_t row, const char dedLine[], const char oldLine[]) {
     // Draw the cleared area with graphical effects
     tft.setCursor(LeftOffSet, TopOffSet);
     if(!compareArrays(dedLine,oldLine)){
-      tft.fillRect(0, TopOffSet, 320, 30,TFT_BLACK);
+      tft.fillRect(0, TopOffSet -2 , 320, 34,TFT_BLACK);
     }else{
         if(!anyPrintable(truncatedDedLine)){
-            tft.fillRect(0, TopOffSet, 320, 30,TFT_BLACK);
+            tft.fillRect(0, TopOffSet -2 , 320, 32,TFT_BLACK);
         }
 
     }
@@ -165,17 +157,28 @@ void drawDedLineNew(uint8_t row, const char dedLine[], const char oldLine[]) {
             tft.fillRect(CursorX,CursorY,12,18,TFT_YELLOW);
             tft.setTextColor(TFT_BLACK, TFT_YELLOW,true);
             tft.setCursor(CursorX, CursorY);
-            tft.print(truncatedDedLine[i]);
+            if(truncatedDedLine[i] == ' '){
+              //tft.setCursor(CursorX + SpaceWidth,CursorY);
+            }
+              tft.print(truncatedDedLine[i]);
+            
+
         } else {
             tft.setTextColor(TFT_YELLOW, TFT_BLACK,true);
+                  CursorX = tft.getCursorX();
+                  CursorY = tft.getCursorY();
             if( truncatedDedLine[i] == '*'){
-                CursorX = tft.getCursorX();
-                CursorY = tft.getCursorY();
                   tft.fillRect(CursorX,CursorY,12,18,TFT_YELLOW);
                   tft.setTextColor(TFT_BLACK, TFT_YELLOW,true);
                   tft.setCursor(CursorX, CursorY);
             }
-            tft.print(truncatedDedLine[i]);
+            if(truncatedDedLine[i] == ' '){
+              //tft.setCursor(CursorX + SpaceWidth,CursorY);
+            }
+              tft.print(truncatedDedLine[i]);
+            
+
+
         }
     }
     CursorX = tft.getCursorX();
@@ -262,7 +265,6 @@ void paint_speed(){
   tft.setTextPadding(160);
   tft.print(" ");
   tft.setCursor(10,180);
-//  tft.drawString(dedline,LeftOffSet,TopOffSet);
   tft.print(AirSpeed);
   tft.println(" kt");
   tft.setCursor(0,210);
