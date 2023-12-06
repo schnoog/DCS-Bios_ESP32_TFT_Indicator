@@ -18,7 +18,7 @@ uint32_t Bitmap = 0xFF8;  // Example bitmap: 111111111000
 
 int16_t CursorX;
 int16_t CursorY;
-
+int16_t ToFill;
 
 void setup_tft(){
   tft.begin();
@@ -37,10 +37,29 @@ void setup_tft(){
 */
 }
 
+
 /*
 * END SETUP
 */
-// Function to manually invert and draw a single character
+
+bool isPrintable(char c) {
+    // Check if the character is a printable ASCII character
+    return (c > 32 && c <= 126);
+}
+
+bool anyPrintable(char arr[]) {
+    // Determine the size of the array using strlen
+    size_t size = strlen(arr);
+
+    for (size_t i = 0; i < size; ++i) {
+        if (isPrintable(arr[i])) {
+            // If any element is printable, return true
+            return true;
+        }
+    }
+    // No printable character found
+    return false;
+}
 
 
 void printBinary(uint32_t value) {
@@ -128,6 +147,11 @@ void drawDedLineNew(uint8_t row, const char dedLine[], const char oldLine[]) {
     tft.setCursor(LeftOffSet, TopOffSet);
     if(!compareArrays(dedLine,oldLine)){
       tft.fillRect(0, TopOffSet, 320, 30,TFT_BLACK);
+    }else{
+        if(!anyPrintable(truncatedDedLine)){
+            tft.fillRect(0, TopOffSet, 320, 30,TFT_BLACK);
+        }
+
     }
     // Draw the current DED line with graphical effects
     tft.setTextColor(TFT_YELLOW, TFT_BLACK);
@@ -154,6 +178,10 @@ void drawDedLineNew(uint8_t row, const char dedLine[], const char oldLine[]) {
             tft.print(truncatedDedLine[i]);
         }
     }
+    CursorX = tft.getCursorX();
+    CursorY = tft.getCursorY();
+    ToFill = 320 - CursorX;
+    tft.fillRect(CursorX,CursorY,ToFill,30,TFT_BLACK);    
 }
 
 
@@ -249,14 +277,6 @@ void paint_speed(){
 
 
 void loop_tft(){
-  LC++;
-  if(LC == 5000){
-//    tft.fillScreen(TFT_BLACK);
-    //tft.fillRect(0, 0, 320, 165,TFT_BLACK);
-    LC=0;
-  }
-
-    //tft.fillScreen(TFT_BLACK);
     tft.loadFont(MYFONT);
     tft.setTextWrap(true, true);
     tft.setTextColor(TFT_YELLOW, TFT_BLACK);

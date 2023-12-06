@@ -10,6 +10,60 @@
 SerialCommand sCmd;  
 
 
+void printLine(){
+  int aNumber;
+  char *arg;
+
+  Serial.println("We're in processCommand");
+  arg = sCmd.next();
+  if (arg != NULL) {
+    aNumber = atoi(arg);    // Converts a char string to an integer
+    switch (aNumber)
+    {
+    case 1:
+      Serial.print("line number ");
+      Serial.println(aNumber);
+      Serial.println(line1);
+      break;
+
+    case 2:
+      Serial.print("line number ");
+      Serial.println(aNumber);
+      Serial.println(line2);
+      break;
+
+    case 3:
+      Serial.print("line number ");
+      Serial.println(aNumber);
+      Serial.println(line3);
+      break;
+
+    case 4:
+      Serial.print("line number ");
+      Serial.println(aNumber);
+      Serial.println(line4);
+      break;
+
+    case 5:
+      Serial.print("line number ");
+      Serial.println(aNumber);
+      Serial.println(line5);
+      break;
+
+
+    default:
+      break;
+    }
+
+
+
+  }
+  else {
+    Serial.println("No argument, expection printline <line number 1-5>");
+  }  
+}
+
+
 void setLine() {
   int aNumber;
   char *arg;
@@ -113,9 +167,31 @@ void setSpeed() {
 
 }
 
+void BLIST(){
+  DcsBios::sendDcsBiosMessage("ICP_LIST_BTN","1");
+  delay(1);
+  DcsBios::sendDcsBiosMessage("ICP_LIST_BTN","0");
+}
+
+void B7(){
+  DcsBios::sendDcsBiosMessage("ICP_BTN_7","1");
+  delay(1);
+  DcsBios::sendDcsBiosMessage("ICP_BTN_7","0");
+}
+
+void BRTN(){
+  DcsBios::sendDcsBiosMessage("ICP_DATA_RTN_SEQ_SW","1");
+  delay(1);
+  DcsBios::sendDcsBiosMessage("ICP_DATA_RTN_SEQ_SW","0");
+}
+
 void Command_Setup(){
     sCmd.addCommand("setline", setLine);
     sCmd.addCommand("setspeed", setSpeed);
+    sCmd.addCommand("b7", B7);
+    sCmd.addCommand("brtn", BRTN);
+    sCmd.addCommand("blist", BLIST);
+    sCmd.addCommand("printline",printLine);
     sCmd.setDefaultHandler(unrecognized);
 
 }
