@@ -3,12 +3,29 @@
 
 #include "indicator.h"
 #include "ded_data.h"
-
+#include "mystorage.h"
 
 #include <SerialCommand.h>
 #define SERIALCOMMAND_DEBUG
 SerialCommand sCmd;  
 
+
+
+void saveLines(){
+  saveToEEPROM(line1, addrLine1);
+  saveToEEPROM(line2, addrLine2);
+  saveToEEPROM(line3, addrLine3);
+  saveToEEPROM(line4, addrLine4);
+  saveToEEPROM(line5, addrLine5);
+}
+
+void loadLines(){
+  restoreFromEEPROM(line1, addrLine1);
+  restoreFromEEPROM(line2, addrLine2);
+  restoreFromEEPROM(line3, addrLine3);
+  restoreFromEEPROM(line4, addrLine4);
+  restoreFromEEPROM(line5, addrLine5);
+}
 
 void debugLine(){
   int aNumber;
@@ -243,6 +260,8 @@ void Command_Setup(){
     sCmd.addCommand("blist", BLIST);
     sCmd.addCommand("printline",printLine);
     sCmd.addCommand("debugline",debugLine);
+    sCmd.addCommand("save",saveLines);
+    sCmd.addCommand("load",loadLines);
     sCmd.setDefaultHandler(unrecognized);
 
 }
